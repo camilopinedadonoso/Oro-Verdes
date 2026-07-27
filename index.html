@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OroVerdes — Venta al por Mayor</title>
+<meta name="description" content="Paltas Hass de primer calibre, calidad única, a precio mayorista. Pago contra entrega. Mallas, cajones y despacho directo a tu negocio o casa.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --forest-dark:#1E3F1A;
+    --forest:#2D5A27;
+    --pulp:#87A922;
+    --pulp-light:#A0C836;
+    --cream:#FAFAF5;
+    --gold:#F7B801;
+    --carbon:#1A2518;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--carbon);
+  }
+  h1,h2,h3,h4,.font-display{
+    font-family:'Montserrat',sans-serif;
+  }
+  .bg-forest-dark{background-color:var(--forest-dark);}
+  .bg-forest{background-color:var(--forest);}
+  .bg-pulp{background-color:var(--pulp);}
+  .bg-pulp-light{background-color:var(--pulp-light);}
+  .bg-gold{background-color:var(--gold);}
+  .text-forest-dark{color:var(--forest-dark);}
+  .text-forest{color:var(--forest);}
+  .text-pulp{color:var(--pulp);}
+  .text-gold{color:var(--gold);}
+  .border-pulp{border-color:var(--pulp);}
+  .border-gold{border-color:var(--gold);}
+
+  /* Signature element: hand-cut avocado wedge divider used as a recurring visual motif */
+  .wedge-divider{
+    position:relative;
+    height:64px;
+    overflow:hidden;
+  }
+  .wedge-divider svg{width:100%;height:100%;display:block;}
+
+  .avocado-pit{
+    fill:#8B5E34;
+  }
+
+  .price-tag{
+    font-family:'Montserrat',sans-serif;
+    font-weight:800;
+  }
+
+  .card-hover{
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card-hover:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px -12px rgba(30,63,26,.25);
+  }
+
+  #cart-sidebar{
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+  }
+  #cart-overlay{
+    transition:opacity .3s ease;
+  }
+
+  .qty-btn{
+    transition:background-color .15s ease;
+  }
+
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--cream);}
+  ::-webkit-scrollbar-thumb{background:var(--pulp);border-radius:10px;}
+
+  .focus-ring:focus-visible{
+    outline:3px solid var(--gold);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  .hero-avocado{
+    animation:float 6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0) rotate(-3deg);}
+    50%{transform:translateY(-14px) rotate(1deg);}
+  }
+
+  .badge-pill{
+    backdrop-filter:blur(4px);
+  }
+
+  .scale-bar{
+    transition:width 1s ease;
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ===================== HEADER ===================== -->
+<header class="fixed top-0 left-0 right-0 z-40 bg-forest-dark/95 backdrop-blur border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-18 py-3">
+    <a href="#inicio" class="flex items-center gap-3 focus-ring rounded-lg">
+      <div class="w-11 h-11 rounded-full bg-pulp-light flex items-center justify-center shrink-0">
+        <i data-lucide="leaf" class="w-6 h-6 text-forest-dark"></i>
+      </div>
+      <div class="leading-tight">
+        <p class="font-display font-800 text-white text-lg tracking-tight">OroVerdes</p>
+        <p class="text-pulp-light text-[11px] uppercase tracking-widest -mt-0.5">Venta al por Mayor</p>
+      </div>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 text-cream/90 font-medium text-sm">
+      <a href="#inicio" class="hover:text-gold transition-colors focus-ring rounded">Inicio</a>
+      <a href="#productos" class="hover:text-gold transition-colors focus-ring rounded">Precios Mayoristas</a>
+      <a href="#calibres" class="hover:text-gold transition-colors focus-ring rounded">Calibres / Variedades</a>
+      <a href="#envios" class="hover:text-gold transition-colors focus-ring rounded">Envíos</a>
+      <a href="#contacto" class="hover:text-gold transition-colors focus-ring rounded">Contacto</a>
+    </nav>
+
+    <button id="cart-toggle" class="relative flex items-center gap-2 bg-pulp hover:bg-pulp-light transition-colors text-forest-dark font-bold rounded-full pl-4 pr-5 py-2.5 focus-ring">
+      <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+      <span class="hidden sm:inline text-sm">Carrito</span>
+      <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-forest-dark text-xs font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-forest-dark">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section id="inicio" class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-forest-dark overflow-hidden">
+  <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle at 20% 20%, white 1px, transparent 1px);background-size:26px 26px;"></div>
+
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 relative grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <span class="badge-pill bg-white/10 text-pulp-light text-xs font-semibold px-3 py-1.5 rounded-full border border-white/15">Descuentos por Cantidad</span>
+        <span class="badge-pill bg-white/10 text-pulp-light text-xs font-semibold px-3 py-1.5 rounded-full border border-white/15">Despacho Rápido</span>
+        <span class="badge-pill bg-gold/90 text-forest-dark text-xs font-bold px-3 py-1.5 rounded-full border border-gold">Pago Contra Entrega</span>
+      </div>
+
+      <h1 class="font-display font-900 text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-6">
+        Paltas de <span class="text-gold">Primer Calibre</span> a Precio Mayorista
+      </h1>
+      <p class="text-cream/80 text-lg mb-8 max-w-lg">
+        Directo del huerto a tu local o casa. Un solo calibre: el mejor. Sin segunda calidad, con el mejor precio del mercado y pago contra entrega.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#productos" class="inline-flex items-center gap-2 bg-gold hover:brightness-95 text-forest-dark font-bold px-7 py-4 rounded-full transition focus-ring">
+          Ver Catálogo y Precios
+          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </a>
+        <a href="#escala" class="inline-flex items-center gap-2 border border-white/30 text-white font-semibold px-7 py-4 rounded-full hover:bg-white/10 transition focus-ring">
+          Ver descuentos por volumen
+        </a>
+      </div>
+    </div>
+
+    <!-- Signature visual: real photo from huerto, framed like a Polaroid pulled from the crate -->
+    <div class="relative flex justify-center lg:justify-end">
+      <div class="hero-avocado w-64 sm:w-72 lg:w-80 bg-white rounded-2xl p-3 pb-4 shadow-2xl rotate-2">
+        <img src="assets/palta-caja.jpg" alt="Paltas Hass de primer calibre recién seleccionadas del huerto" class="w-full h-72 sm:h-80 object-cover rounded-xl">
+      </div>
+      <div class="absolute -bottom-4 -left-2 sm:left-4 lg:left-0 bg-white rounded-2xl shadow-xl px-5 py-3 flex items-center gap-3 border border-pulp-light/40">
+        <i data-lucide="badge-check" class="w-5 h-5 text-pulp"></i>
+        <p class="text-forest-dark text-sm font-semibold">100% Hass · Primer Calibre</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wedge-divider bg-forest-dark">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,60 L0,20 Q300,60 600,20 T1200,20 L1200,60 Z" fill="var(--cream)"/></svg>
+</div>
+
+<!-- ===================== BENEFICIOS ===================== -->
+<section class="py-20 bg-cream">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <p class="text-pulp font-bold text-sm uppercase tracking-widest mb-2">Por qué elegirnos</p>
+      <h2 class="font-display font-800 text-3xl lg:text-4xl text-forest-dark">Pensado para quien compra en volumen</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white rounded-2xl p-7 border border-forest/10 card-hover">
+        <div class="w-12 h-12 rounded-xl bg-pulp-light/30 flex items-center justify-center mb-5">
+          <i data-lucide="sparkles" class="w-6 h-6 text-forest"></i>
+        </div>
+        <h3 class="font-display font-700 text-lg text-forest-dark mb-2">Calidad Selección</h3>
+        <p class="text-sm text-carbon/70">Cremosas, sin hilachas y en su punto justo de maduración.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-7 border border-forest/10 card-hover">
+        <div class="w-12 h-12 rounded-xl bg-pulp-light/30 flex items-center justify-center mb-5">
+          <i data-lucide="package" class="w-6 h-6 text-forest"></i>
+        </div>
+        <h3 class="font-display font-700 text-lg text-forest-dark mb-2">Venta x Mayor</h3>
+        <p class="text-sm text-carbon/70">Precios especiales desde 10 kg, por cajones y en formato malla.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-7 border border-forest/10 card-hover">
+        <div class="w-12 h-12 rounded-xl bg-pulp-light/30 flex items-center justify-center mb-5">
+          <i data-lucide="truck" class="w-6 h-6 text-forest"></i>
+        </div>
+        <h3 class="font-display font-700 text-lg text-forest-dark mb-2">Despacho Directo</h3>
+        <p class="text-sm text-carbon/70">Entregas coordinadas a tu local, verdulería o domicilio.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-7 border border-forest/10 card-hover">
+        <div class="w-12 h-12 rounded-xl bg-pulp-light/30 flex items-center justify-center mb-5">
+          <i data-lucide="badge-dollar-sign" class="w-6 h-6 text-forest"></i>
+        </div>
+        <h3 class="font-display font-700 text-lg text-forest-dark mb-2">Garantía de Precio</h3>
+        <p class="text-sm text-carbon/70">La mejor relación precio/calidad del mercado, sin intermediarios.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CATÁLOGO ===================== -->
+<section id="productos" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <p class="text-pulp font-bold text-sm uppercase tracking-widest mb-2">Catálogo</p>
+      <h2 class="font-display font-800 text-3xl lg:text-4xl text-forest-dark">Precios Mayoristas</h2>
+      <p class="text-carbon/60 mt-3 text-sm">Precios de referencia, ajustables según temporada y disponibilidad de huerto.</p>
+    </div>
+
+    <div id="product-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+  </div>
+</section>
+
+<!-- ===================== ESCALA DE PRECIOS ===================== -->
+<section id="escala" class="py-20 bg-forest-dark">
+  <div class="max-w-5xl mx-auto px-5 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="text-gold font-bold text-sm uppercase tracking-widest mb-2">Compra más, paga menos</p>
+      <h2 class="font-display font-800 text-3xl lg:text-4xl text-white">Escala de Descuento por Volumen</h2>
+      <p class="text-cream/60 mt-3 text-sm max-w-xl mx-auto">Mientras más cajones lleves, menor es el precio por kilo. Así de simple.</p>
+    </div>
+
+    <div class="space-y-5">
+      <div>
+        <div class="flex justify-between text-cream/80 text-sm font-semibold mb-2">
+          <span>1 – 4 cajones</span><span>Precio base</span>
+        </div>
+        <div class="h-4 rounded-full bg-white/10 overflow-hidden">
+          <div class="scale-bar h-full bg-pulp-light rounded-full" style="width:45%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-cream/80 text-sm font-semibold mb-2">
+          <span>5 – 9 cajones</span><span class="text-gold">-8% por kilo</span>
+        </div>
+        <div class="h-4 rounded-full bg-white/10 overflow-hidden">
+          <div class="scale-bar h-full bg-pulp rounded-full" style="width:70%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-cream/80 text-sm font-semibold mb-2">
+          <span>10+ cajones</span><span class="text-gold">-15% por kilo</span>
+        </div>
+        <div class="h-4 rounded-full bg-white/10 overflow-hidden">
+          <div class="scale-bar h-full bg-gold rounded-full" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-cream/50 text-xs mt-8">*Porcentajes referenciales. Consulta el descuento exacto para tu pedido por WhatsApp.</p>
+  </div>
+</section>
+
+<div class="wedge-divider bg-forest-dark">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,20 Q300,60 600,20 T1200,20 L1200,0 L0,0 Z" fill="var(--cream)"/></svg>
+</div>
+
+<!-- ===================== CALIBRES ===================== -->
+<section id="calibres" class="py-20 bg-cream">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <p class="text-pulp font-bold text-sm uppercase tracking-widest mb-2">Calibres / Variedades</p>
+      <h2 class="font-display font-800 text-3xl lg:text-4xl text-forest-dark mb-6">Un solo calibre: el mejor</h2>
+      <p class="text-carbon/70 mb-8">Trabajamos exclusivamente con palta Hass de primer calibre. No vendemos segunda calidad: cada pieza que sale de nuestro huerto pasa por la misma selección exigente, solo cambia el formato según lo que necesite tu negocio o tu casa.</p>
+
+      <div class="space-y-4">
+        <div class="flex gap-4 items-start">
+          <div class="w-9 h-9 rounded-full bg-pulp-light/40 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="badge-check" class="w-4 h-4 text-forest"></i></div>
+          <div><p class="font-semibold text-forest-dark">Primer Calibre, sin excepciones</p><p class="text-sm text-carbon/60">Piezas grandes y uniformes, seleccionadas a mano, calidad increíble.</p></div>
+        </div>
+        <div class="flex gap-4 items-start">
+          <div class="w-9 h-9 rounded-full bg-pulp-light/40 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="package" class="w-4 h-4 text-forest"></i></div>
+          <div><p class="font-semibold text-forest-dark">Formatos según tu necesidad</p><p class="text-sm text-carbon/60">Mallas de 5 kg o cajones de 10, 15 y 20+ kg, todos del mismo calibre superior.</p></div>
+        </div>
+        <div class="flex gap-4 items-start">
+          <div class="w-9 h-9 rounded-full bg-pulp-light/40 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="banknote" class="w-4 h-4 text-forest"></i></div>
+          <div><p class="font-semibold text-forest-dark">Pago Contra Entrega</p><p class="text-sm text-carbon/60">Pagas al recibir tu pedido, sin adelantos ni sorpresas.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-5">
+      <div class="bg-white rounded-2xl p-6 border border-forest/10 text-center">
+        <p class="font-display font-800 text-3xl text-forest">5 kg</p>
+        <p class="text-xs text-carbon/60 mt-1">Malla familiar</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-forest/10 text-center">
+        <p class="font-display font-800 text-3xl text-forest">10-20+ kg</p>
+        <p class="text-xs text-carbon/60 mt-1">Cajones mayoristas</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-forest/10 text-center">
+        <p class="font-display font-800 text-3xl text-forest">1</p>
+        <p class="text-xs text-carbon/60 mt-1">Único calibre: el mejor</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-forest/10 text-center">
+        <p class="font-display font-800 text-3xl text-forest">100%</p>
+        <p class="text-xs text-carbon/60 mt-1">Hass seleccionada</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALERÍA DE CALIDAD ===================== -->
+<section class="py-20 bg-forest-dark overflow-hidden">
+  <div class="max-w-6xl mx-auto px-5 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <p class="text-gold font-bold text-sm uppercase tracking-widest mb-2">Así llega tu pedido</p>
+      <h2 class="font-display font-800 text-3xl lg:text-4xl text-white">Calidad que se ve a simple vista</h2>
+      <p class="text-cream/60 mt-3 text-sm">Fotos reales de nuestra selección, directo del huerto.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-8">
+      <figure class="group">
+        <div class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+          <img src="assets/palta-caja.jpg" alt="Cajones de paltas Hass de primer calibre recién seleccionadas del huerto" class="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <figcaption class="text-center text-cream/60 text-sm mt-4">Selección de primer calibre, lista para despacho</figcaption>
+      </figure>
+      <figure class="group">
+        <div class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+          <img src="assets/palta-corte.jpg" alt="Paltas Hass cortadas mostrando su pulpa cremosa y madurez perfecta" class="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <figcaption class="text-center text-cream/60 text-sm mt-4">Pulpa cremosa, punto de maduración perfecto</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ENVÍOS ===================== -->
+<section id="envios" class="py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-5 lg:px-8 text-center">
+    <p class="text-pulp font-bold text-sm uppercase tracking-widest mb-2">Envíos</p>
+    <h2 class="font-display font-800 text-3xl lg:text-4xl text-forest-dark mb-10">Despacho coordinado, sin sorpresas</h2>
+    <div class="grid sm:grid-cols-3 gap-6 text-left">
+      <div class="p-6 rounded-2xl bg-cream border border-forest/10">
+        <i data-lucide="map-pin" class="w-6 h-6 text-pulp mb-3"></i>
+        <p class="font-semibold text-forest-dark mb-1">Zonas de despacho</p>
+        <p class="text-sm text-carbon/60">Región Metropolitana y alrededores. Consulta tu zona por WhatsApp.</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-cream border border-forest/10">
+        <i data-lucide="clock" class="w-6 h-6 text-pulp mb-3"></i>
+        <p class="font-semibold text-forest-dark mb-1">Tiempos de entrega</p>
+        <p class="text-sm text-carbon/60">Pedidos confirmados antes de las 12:00 se despachan el mismo día.</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-cream border border-forest/10">
+        <i data-lucide="shield-check" class="w-6 h-6 text-pulp mb-3"></i>
+        <p class="font-semibold text-forest-dark mb-1">Garantía de estado</p>
+        <p class="text-sm text-carbon/60">Si un pedido llega en mal estado, lo resolvemos de inmediato.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER / CONTACTO ===================== -->
+<footer id="contacto" class="bg-forest-dark pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 grid md:grid-cols-4 gap-10 text-cream/80">
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-9 h-9 rounded-full bg-pulp-light flex items-center justify-center">
+          <i data-lucide="leaf" class="w-5 h-5 text-forest-dark"></i>
+        </div>
+        <p class="font-display font-800 text-white">OroVerdes</p>
+      </div>
+      <p class="text-sm text-cream/60">Venta al por mayor de palta Hass, directo del huerto a tu negocio o casa.</p>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white mb-3 text-sm uppercase tracking-wide">Contacto</p>
+      <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-pulp-light"></i> +56 9 1234 5678</li>
+        <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-pulp-light"></i> pedidos@oroverdes.cl</li>
+        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-pulp-light"></i> Región Metropolitana, Chile</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white mb-3 text-sm uppercase tracking-wide">Medios de pago</p>
+      <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="banknote" class="w-4 h-4 text-gold"></i> Pago contra entrega</li>
+        <li class="flex items-center gap-2"><i data-lucide="landmark" class="w-4 h-4 text-pulp-light"></i> Transferencia bancaria</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white mb-3 text-sm uppercase tracking-wide">Síguenos</p>
+      <div class="flex gap-3">
+        <a href="#" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pulp flex items-center justify-center transition focus-ring"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="#" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pulp flex items-center justify-center transition focus-ring"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="https://wa.me/56912345678" target="_blank" class="w-9 h-9 rounded-full bg-white/10 hover:bg-pulp flex items-center justify-center transition focus-ring"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 mt-12 pt-6 border-t border-white/10 text-center text-cream/40 text-xs">
+    © 2026 OroVerdes. Todos los derechos reservados.
+  </div>
+</footer>
+
+<!-- ===================== FLOATING WHATSAPP BUTTON ===================== -->
+<a href="https://wa.me/56912345678" target="_blank" aria-label="Contactar por WhatsApp"
+   class="fixed bottom-6 left-6 z-40 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-xl hover:scale-105 transition focus-ring">
+  <i data-lucide="message-circle" class="w-7 h-7 text-white"></i>
+</a>
+
+<!-- ===================== CART OVERLAY + SIDEBAR ===================== -->
+<div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none"></div>
+
+<aside id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 translate-x-full flex flex-col">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-forest/10 bg-forest-dark">
+    <h3 class="font-display font-800 text-white text-lg flex items-center gap-2">
+      <i data-lucide="shopping-cart" class="w-5 h-5 text-gold"></i> Tu Pedido
+    </h3>
+    <button id="cart-close" class="text-white/70 hover:text-white focus-ring rounded"><i data-lucide="x" class="w-6 h-6"></i></button>
+  </div>
+
+  <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-5 space-y-4"></div>
+
+  <div id="cart-empty" class="flex-1 flex flex-col items-center justify-center text-center px-6 text-carbon/40">
+    <i data-lucide="package-open" class="w-12 h-12 mb-3"></i>
+    <p class="text-sm">Tu carrito está vacío.<br>Agrega productos desde el catálogo.</p>
+  </div>
+
+  <div class="px-6 py-5 border-t border-forest/10 bg-cream">
+    <div class="flex justify-between items-center mb-4">
+      <span class="font-semibold text-forest-dark">Total estimado</span>
+      <span id="cart-total" class="price-tag text-2xl text-forest">$0</span>
+    </div>
+    <button id="whatsapp-checkout" class="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:brightness-95 text-white font-bold py-3.5 rounded-full transition focus-ring">
+      <i data-lucide="message-circle" class="w-5 h-5"></i> Solicitar Pedido por WhatsApp
+    </button>
+    <p class="text-[11px] text-carbon/40 text-center mt-3">Precios de referencia. Se confirman al recibir tu pedido.</p>
+  </div>
+</aside>
+
+<!-- ===================== TEMPLATE: PRODUCT CARD ===================== -->
+<template id="product-card-template">
+  <div class="product-card bg-cream rounded-2xl overflow-hidden border border-forest/10 card-hover flex flex-col">
+    <div class="h-40 relative flex items-center justify-center bg-pulp-light/25">
+      <svg viewBox="0 0 120 120" class="w-20 h-20">
+        <ellipse cx="60" cy="60" rx="50" ry="54" fill="#1A2518"/>
+        <ellipse cx="60" cy="60" rx="44" ry="48" fill="var(--pulp)"/>
+        <ellipse cx="60" cy="60" rx="30" ry="34" fill="#F4EFD0"/>
+        <ellipse cx="60" cy="60" rx="15" ry="17" class="avocado-pit"/>
+      </svg>
+      <span class="discount-badge absolute top-3 left-3 bg-gold text-forest-dark text-[11px] font-bold px-2.5 py-1 rounded-full"></span>
+    </div>
+    <div class="p-5 flex flex-col flex-1">
+      <h4 class="prod-name font-display font-700 text-forest-dark text-base mb-1"></h4>
+      <p class="prod-desc text-xs text-carbon/60 mb-4"></p>
+      <div class="mt-auto flex items-center justify-between">
+        <span class="prod-price price-tag text-forest text-lg"></span>
+        <button class="add-to-cart-btn w-10 h-10 rounded-full bg-forest hover:bg-pulp text-white flex items-center justify-center transition focus-ring">
+          <i data-lucide="plus" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- ===================== TEMPLATE: CART LINE ===================== -->
+<template id="cart-line-template">
+  <div class="cart-line flex items-center gap-3 pb-4 border-b border-forest/10">
+    <div class="w-14 h-14 rounded-xl bg-pulp-light/25 flex items-center justify-center shrink-0">
+      <i data-lucide="package" class="w-6 h-6 text-forest"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="line-name font-semibold text-forest-dark text-sm truncate"></p>
+      <p class="line-unit text-xs text-carbon/50"></p>
+      <div class="flex items-center gap-2 mt-2">
+        <button class="qty-minus qty-btn w-7 h-7 rounded-full bg-forest/10 hover:bg-forest/20 flex items-center justify-center focus-ring">
+          <i data-lucide="minus" class="w-3.5 h-3.5 text-forest-dark"></i>
+        </button>
+        <span class="line-qty text-sm font-bold w-6 text-center"></span>
+        <button class="qty-plus qty-btn w-7 h-7 rounded-full bg-forest/10 hover:bg-forest/20 flex items-center justify-center focus-ring">
+          <i data-lucide="plus" class="w-3.5 h-3.5 text-forest-dark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="text-right shrink-0">
+      <p class="line-subtotal price-tag text-sm text-forest"></p>
+      <button class="line-remove text-[11px] text-red-400 hover:text-red-500 mt-1 focus-ring rounded">Quitar</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  // ---------- Data ----------
+  const PRODUCTS = [
+    {
+      id: 'malla-familiar',
+      name: 'Malla Familiar Palta Hass (5 kg)',
+      desc: 'Calibre parejo, ideal para consumo familiar. Punto de maduración óptimo.',
+      unitLabel: 'malla de 5 kg',
+      price: 8990,
+      priceFormatted: '$8.990 / malla',
+      badge: '-10% x 2 mallas'
+    },
+    {
+      id: 'cajon-primera',
+      name: 'Cajón Palta Hass Primera Selección (10 kg)',
+      desc: 'Piezas grandes y uniformes, seleccionadas a mano.',
+      unitLabel: 'cajón de 10 kg',
+      price: 15990,
+      priceFormatted: '$15.990 / cajón',
+      badge: 'Más vendido'
+    },
+    {
+      id: 'formato-negocio',
+      name: 'Palta Hass Formato Negocio / Verdulería (20 kg+)',
+      desc: 'Pensado para restaurantes y verdulerías. Mejor precio por kilo.',
+      unitLabel: 'cajón de 20 kg+',
+      price: 28990,
+      priceFormatted: '$28.990 / cajón',
+      badge: 'Precio mayorista'
+    },
+    {
+      id: 'cajon-extra',
+      name: 'Cajón Palta Hass Extra (15 kg) — Primer Calibre',
+      desc: 'Mismo calibre superior, formato intermedio ideal para pedidos semanales.',
+      unitLabel: 'cajón de 15 kg',
+      price: 22990,
+      priceFormatted: '$22.990 / cajón',
+      badge: 'Primer calibre'
+    }
+  ];
+
+  const WHATSAPP_NUMBER = '56912345678'; // TODO: reemplazar por el número real del negocio
+
+  // ---------- State ----------
+  let cart = JSON.parse(localStorage.getItem('palta-cart') || '{}');
+
+  function formatCLP(n){
+    return '$' + n.toLocaleString('es-CL');
+  }
+
+  function saveCart(){
+    localStorage.setItem('palta-cart', JSON.stringify(cart));
+  }
+
+  // ---------- Render product grid ----------
+  const grid = document.getElementById('product-grid');
+  const cardTpl = document.getElementById('product-card-template');
+
+  PRODUCTS.forEach(p => {
+    const node = cardTpl.content.cloneNode(true);
+    node.querySelector('.prod-name').textContent = p.name;
+    node.querySelector('.prod-desc').textContent = p.desc;
+    node.querySelector('.prod-price').textContent = p.priceFormatted;
+    node.querySelector('.discount-badge').textContent = p.badge;
+    const btn = node.querySelector('.add-to-cart-btn');
+    btn.addEventListener('click', () => addToCart(p.id));
+    node.querySelector('.product-card').dataset.id = p.id;
+    grid.appendChild(node);
+  });
+
+  // ---------- Cart logic ----------
+  function addToCart(id){
+    cart[id] = (cart[id] || 0) + 1;
+    saveCart();
+    renderCart();
+    openCart();
+  }
+
+  function changeQty(id, delta){
+    if(!cart[id]) return;
+    cart[id] += delta;
+    if(cart[id] <= 0) delete cart[id];
+    saveCart();
+    renderCart();
+  }
+
+  function removeItem(id){
+    delete cart[id];
+    saveCart();
+    renderCart();
+  }
+
+  const cartItemsEl = document.getElementById('cart-items');
+  const cartEmptyEl = document.getElementById('cart-empty');
+  const cartTotalEl = document.getElementById('cart-total');
+  const cartCountEl = document.getElementById('cart-count');
+  const lineTpl = document.getElementById('cart-line-template');
+
+  function renderCart(){
+    cartItemsEl.innerHTML = '';
+    const ids = Object.keys(cart);
+
+    if(ids.length === 0){
+      cartEmptyEl.classList.remove('hidden');
+      cartItemsEl.classList.add('hidden');
+    } else {
+      cartEmptyEl.classList.add('hidden');
+      cartItemsEl.classList.remove('hidden');
+    }
+
+    let total = 0;
+    let count = 0;
+
+    ids.forEach(id => {
+      const product = PRODUCTS.find(p => p.id === id);
+      if(!product) return;
+      const qty = cart[id];
+      const subtotal = product.price * qty;
+      total += subtotal;
+      count += qty;
+
+      const node = lineTpl.content.cloneNode(true);
+      node.querySelector('.line-name').textContent = product.name;
+      node.querySelector('.line-unit').textContent = product.unitLabel;
+      node.querySelector('.line-qty').textContent = qty;
+      node.querySelector('.line-subtotal').textContent = formatCLP(subtotal);
+      node.querySelector('.qty-minus').addEventListener('click', () => changeQty(id, -1));
+      node.querySelector('.qty-plus').addEventListener('click', () => changeQty(id, 1));
+      node.querySelector('.line-remove').addEventListener('click', () => removeItem(id));
+      cartItemsEl.appendChild(node);
+    });
+
+    cartTotalEl.textContent = formatCLP(total);
+    cartCountEl.textContent = count;
+    lucide.createIcons();
+  }
+
+  // ---------- Cart sidebar open/close ----------
+  const sidebar = document.getElementById('cart-sidebar');
+  const overlay = document.getElementById('cart-overlay');
+
+  function openCart(){
+    sidebar.classList.remove('translate-x-full');
+    overlay.classList.remove('opacity-0', 'pointer-events-none');
+  }
+  function closeCart(){
+    sidebar.classList.add('translate-x-full');
+    overlay.classList.add('opacity-0', 'pointer-events-none');
+  }
+
+  document.getElementById('cart-toggle').addEventListener('click', openCart);
+  document.getElementById('cart-close').addEventListener('click', closeCart);
+  overlay.addEventListener('click', closeCart);
+
+  // ---------- WhatsApp checkout ----------
+  document.getElementById('whatsapp-checkout').addEventListener('click', () => {
+    const ids = Object.keys(cart);
+    if(ids.length === 0){
+      alert('Tu carrito está vacío. Agrega productos antes de enviar tu pedido.');
+      return;
+    }
+
+    let message = 'Hola, quiero hacer el siguiente pedido mayorista de OroVerdes:%0A%0A';
+    let total = 0;
+
+    ids.forEach(id => {
+      const product = PRODUCTS.find(p => p.id === id);
+      if(!product) return;
+      const qty = cart[id];
+      const subtotal = product.price * qty;
+      total += subtotal;
+      message += `• ${qty} x ${product.name} — ${formatCLP(subtotal)}%0A`;
+    });
+
+    message += `%0ATotal estimado: ${formatCLP(total)}%0A%0AQuedo atento/a para coordinar despacho y pago.`;
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
+  });
+
+  // ---------- Init ----------
+  renderCart();
+  lucide.createIcons();
+</script>
+
+</body>
+</html>
